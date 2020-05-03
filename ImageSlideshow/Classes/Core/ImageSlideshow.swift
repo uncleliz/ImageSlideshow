@@ -57,7 +57,7 @@ open class ImageSlideshow: UIView {
 
     /// Scroll View to wrap the slideshow
     public let scrollView = UIScrollView()
-
+    private let isStartTime: Bool = false
     /// Page Control shown in the slideshow
     @available(*, deprecated, message: "Use pageIndicator.view instead")
     open var pageControl: UIPageControl {
@@ -422,11 +422,16 @@ open class ImageSlideshow: UIView {
 
     fileprivate func setTimerIfNeeded() {
         if slideshowInterval > 0 && scrollViewImages.count > 1 && slideshowTimer == nil {
+            self.isStartTime = true
             slideshowTimer = Timer.scheduledTimer(timeInterval: slideshowInterval, target: self, selector: #selector(ImageSlideshow.slideshowTick(_:)), userInfo: nil, repeats: true)
         }
     }
 
     @objc func slideshowTick(_ timer: Timer) {
+        if slideshowInterval == 0 || scrollViewImages.count <= 1 || self.isStartTime == false {
+            pauseTimer()
+            return
+        }
         let page = scrollView.frame.size.width > 0 ? Int(scrollView.contentOffset.x / scrollView.frame.size.width) : 0
         var nextPage = page + 1
 
@@ -479,6 +484,7 @@ open class ImageSlideshow: UIView {
 
     /// Stops slideshow timer
     open func pauseTimer() {
+        self.isStartTime = false
         slideshowTimer?.invalidate()
         slideshowTimer = nil
     }
