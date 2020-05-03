@@ -57,7 +57,7 @@ open class ImageSlideshow: UIView {
 
     /// Scroll View to wrap the slideshow
     public let scrollView = UIScrollView()
-    private let isStartTime: Bool = false
+    private var isStartTime: Bool = false
     /// Page Control shown in the slideshow
     @available(*, deprecated, message: "Use pageIndicator.view instead")
     open var pageControl: UIPageControl {
